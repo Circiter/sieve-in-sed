@@ -5,8 +5,8 @@
 # (c) Circiter (mailto:xcirciter@gmail.com)
 # Repository: "github.com/Circiter/sieve-in-sed".
 
-# Usage: echo <number> | ./sieve.sed.
-# E.g., echo 770 | ./sieve.sed # N.B., 2*5*7*11=770.
+# Usage: echo <number> | ./factor.sed.
+# E.g., echo 770 | ./factor.sed # N.B., 2*5*7*11=770.
 
 # Convert a given number from decimal to unary notation.
 
@@ -25,14 +25,14 @@
     s/^.*,//
     s/_/9/g
     s/^0(.)/\1/
-    x; s/^x*$/&x/; x # Increment the unary counter in the hold space.
+    x; s/^1*$/&1/; x # Increment the unary counter in the hold space.
     /^0$/!bdecrement
 g # Now the base-10 number is converted to the base-1.
 
 # Sieving.
 
 # Transform a given string to the format #01*\n.
-s/./1/g; s/^./0/; s/^/#/; s/$/\n/
+s/^./0/; s/^/#/; s/$/\n/
 
 # @, :, # -- are auxiliary markers (pointers).
 # The # is used to mark the current prime,
