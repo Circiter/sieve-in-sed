@@ -31,7 +31,7 @@ g # Now the base-10 number is converted to the base-1.
 
 # Sieving.
 
-# Transform a given string to the format #01*\n.
+# Transform the unary number to the format #01*\n.
 s/^./0/; s/^/#/; s/$/\n/
 
 # @, :, # -- are auxiliary markers (pointers).
