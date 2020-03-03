@@ -76,14 +76,13 @@ s/^./0/; s/^/#/; s/$/\n/
     # the last 1 in the sieve, we can not print
     # this "trivial" prime factor. So we need
     # a workaround here.
-
     /1#\n/s/#/@/ # Insert @ again.
 
     # If a prime factor found.
     /@/{ :prime_exponent
         H # Backup two first lines to the hold space.
 
-        # TODO: Print in decimal.
+        # Print in decimal.
         s/$/\n0/
         :print_decimal
             s/:([^\n])/\1:/
@@ -92,7 +91,7 @@ s/^./0/; s/^/#/; s/$/\n/
             :digit s/9(_*)$/_\1/; tdigit
             s/\n(_*)$/\n0\1/
 
-            s/\n([^\n]*)$/\n0123456789,\1/
+            s/\n([^\n]*)$/\n0123456789,\1/ # Lookup table.
             :increment_digit
                 s/([^\n])([^\n])(,.*)\1(_*)$/\1\3\2\4/
                 tok
@@ -147,7 +146,7 @@ s/^./0/; s/^/#/; s/$/\n/
         /@/{
             # Hold space: <number>\n<prime_number>\n<number_divided_by_prime>.
             s/^.*\n([^\n]*)$/\1/ # Leave only number/prime_number.
-            # Hold space: <number>
+            # Hold space: <number_divided_by_prime>
             x
             bprime_exponent
         }
