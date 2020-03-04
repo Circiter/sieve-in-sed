@@ -5,13 +5,31 @@
 # (c) Circiter (mailto:xcirciter@gmail.com).
 # License: MIT.
 
-# Usage: echo <unary_size> | ./sieve.sed, where <unary_size> is any
-# string such that strlen(<unary_size>) is the size of a sieve.
+# Usage: echo <sieve_size> | ./sieve.sed
+
+# Convert a given number from decimal to unary notation.
+
+:decrement
+    :replace_zero s/0(_*)$/_\1/; treplace_zero
+
+    s/^/9876543210,/ # Append the lookup table.
+    :decrement_digit
+        s/(.)(.)(,.*)\1(_*)$/\1\3\2\4/
+        tmatched
+        s/.,/,/
+        :matched
+        /..,/bdecrement_digit
+    s/^.*,//
+    s/_/9/g
+    s/^0(.)/\1/
+    x; s/^1*$/&1/; x # Increment the unary counter in the hold space.
+    /^0$/!bdecrement
+g # Now to the base-10 number is converted to the base-1.
 
 ### Part I, Sieving ###
 
-# Transform a given string to the format #01*\n.
-s/./1/g; s/^./0/; s/^/#/; s/$/\n/
+# Transform the base-1 number to the format #01*\n.
+s/^./0/; s/^/#/; s/$/\n/
 
 # @, :, # -- are auxiliary markers (pointers).
 :sieve
@@ -53,7 +71,7 @@ s/\n.*$//; s/#// # Leave only the complete sieve.
 # Based on the incrementation algorithm by Bruno
 # (Haible@ma2s2.mathematik.uni-karlsruhe.de)
 # but extended by a lookup table.
-x; s/^/0/; x
+x; s/^.*$/0/; x
 :print
     # Increment the content of the hold buffer.
     x
@@ -64,16 +82,13 @@ x; s/^/0/; x
     s/^(_*)$/0\1/
 
     s/^/0123456789@/ # Add a lookup table.
-
     :increment
-        s/^(.*)@(.*)$/\1@\2\n\1/ # Backup the lookup table.
-
         # Increment last digit only.
-        s/^.*(.)(.)@(.*)\1(_*\n)/\3\2\4/
-
-        # Restore and update the lookup table.
-        s/^.*@//; s/^(.*)\n(.*)$/\2@\1/; s/.@/@/
-        /^.*..@/bincrement # Repeat until the lookup table is empty.
+        s/(.)(.)(@.*)\1(_*)$/\1\3\2\4/
+        tok
+        s/.@/@/
+        :ok
+        /..@/bincrement # Repeat until the lookup table is empty.
 
     s/^.*@// # There is no need in the lookup table anymore.
 
