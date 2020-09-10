@@ -10,6 +10,8 @@ List of files:
 - `binary-sieve.sed` -- equivalent to the `sieve.sed` but works in base-2
   instead of base-10;
 - `factor.sed` -- factorization of a given number;
+- `factor-hack-unary.sed` -- a factorization code utilising a primality
+  test based solely on a specially crafted [extended] regular expression;
 - `anagram.sed` -- detects anagrams, i.e. determines if a two given strings
   are permutations of each other; the present script does it in somewhat unusual
   way (using the fundamental theorem of arithmetic).
