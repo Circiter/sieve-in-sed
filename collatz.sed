@@ -20,7 +20,7 @@
 
 :loop
 
-h; x; s/^/current number: /; p; s/^.*$//; x
+h; x; p; s/^.*$//; x # Print current number.
 
 # Convert a given binary number to unary notation.
 
@@ -154,7 +154,7 @@ s/^/\n/
 :remove_two s/\n10\n/\n/; tremove_two
 
 # Check for convergence.
-/^\n$/ {s/^.*$/[converged]/; p; q}
+/^\n$/ {s/^.*$/1/; p; q}
 
 # Then append 3 (=11 in binary).
 s/^/11/
