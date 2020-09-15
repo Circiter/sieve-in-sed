@@ -70,9 +70,6 @@ s/^./0/; s/^/#/; s/$/\n/
     # The hold space now contains the result of dividing
     # the given number by the current prime.
 
-    i prime number after sieve
-    p
-
     # If we are factoring a prime number then
     # due to the fact that the code above
     # prematurely removed the @ marker after
