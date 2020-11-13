@@ -16,3 +16,6 @@ List of files:
   are permutations of each other; the present script does it in somewhat unusual
   way (using the fundamental theorem of arithmetic).
 - `collatz.sed` -- the well-known 3x-1 dynamical system from the Collatz conjecture.
+
+See also my blog post on this topic at http://circiter.github.io/sieve-of-eratosthenes-in-sed 
+(in Russian).

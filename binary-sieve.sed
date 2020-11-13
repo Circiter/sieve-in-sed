@@ -2,11 +2,11 @@
 
 # The sieve of Eratosthenes; this version prints the primes in base 2.
 
-# (c) Circiter (mailto:xcirciter@gmail.com).
-# License: MIT.
-
 # Usage: echo <sieve_size> | ./sieve.sed
 # N.B., sieve_size is a binary number written using 0 and 1.
+
+# (c) Circiter (mailto:xcirciter@gmail.com).
+# License: MIT.
 
 # Convert a given binary number to unary notation.
 

@@ -1,8 +1,8 @@
 #!/bin/sed -Enf
 
-# The sieve of Eratosthenes (github.com/Circiter/sieve-in-sed).
+# The sieve of Euler (the part of github.com/Circiter/sieve-in-sed).
 
-# Usage: echo <sieve_size> | ./sieve.sed
+# Usage: echo <sieve_size> | ./euler-sieve.sed
 
 # (c) Circiter (mailto:xcirciter@gmail.com).
 # License: MIT.
@@ -31,34 +31,48 @@ g # Now to the base-10 number is converted to the base-1.
 # Transform the base-1 number to the format #01*\n.
 s/^./0/; s/^/#/; s/$/\n/
 
-# @, :, # -- are auxiliary markers (pointers).
+# #_@:, -- are auxiliary markers (pointers).
 :sieve
     # Find next prime.
-    s/#(0*1)/\1#@/
-    # Copy the prefix to the second row.
-    s/^(.*)@(.*\n).*$/\1@\2:\1/
-    # Remove illegal symbols from the second row.
-    :clear s/(\n.*)([^01:])(.*)$/\1\3/; tclear
+    s/#(0*1)/\1#_/
 
-    :exclude
-        # Find next composite to be excluded.
-        :composite
+    :scan_multiples
+        # Copy the prefixes to the second and third row.
+        s/^([^#]*)#([^_]*)_([^\n]*\n).*$/\1#\2_\3:\1\2\n,\1/
+
+        # Find next composite to be "crossed out".
+        s/^/@/
+        :multiplication
             # Move the @ and : markers.
-            s/@([^\n])/\1@/; s/:(.)/\1:/
+            s/@([^\n])/\1@/; s/:([^\n])/\1:/
+
             /:./s/@\n/\n/ # Ensure that the last cell in sieve can be excluded.
-            /@.*:./bcomposite # Repeat if it's possible to move the pointers further.
+            /@.*:[^\n]/bmultiplication # Repeat if it's possible to move the pointers further.
 
-        # Exclude the composite number founded.
-        s/.@/0@/
+            # Reinitialize the : pointer.
+            s/://; s/^([^\n]*\n)/\1:/
 
-        # Reinitialize the : pointer.
-        s/://; s/\n/\n:/
+            # Move the , marker.
+            s/,([^\n])/\1,/
 
-        # FIXME: /@./ or /@[^\n]/?
-        /@./bexclude # Keep excluding a multiples of the current prime.
+            /@.*:.*,./bmultiplication
 
-    # Remove the @ marker.
-    s/@//
+        # Do not exclude founded composite number right now
+        # but only mark it for deletion (write x instead of 0
+        # at its position).
+        s/@([^\n])[^\n]/\1x@/
+
+        # Reinitialize the , pointer.
+        s/,//; s/^([^\n]*\n[^\n]*\n)/\1,/
+
+        # Select next multiple.
+        s/@//
+        s/_(0*[1x])/\1_/
+
+        /_0*[1x]/bscan_multiples # Keep excluding a multiples of the current prime.
+
+    s/_//; s/@// # Remove the @ and _ markers.
+    s/x/0/g # Actually exclude all the marked digits.
 
     # Keep sieving while there are any primes to the right of #.
     /#0*1/bsieve
