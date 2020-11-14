@@ -1,4 +1,5 @@
 # sieve-in-sed
+
 An attempt to implement the sieve of Eratosthenes in sed.
 
 See the files `*.sed` (mainly `sieve.sed`) for details.
